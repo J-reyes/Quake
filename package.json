@@ -1,12 +1,15 @@
 {
-  "name": "timers_app",
-  "version": "1.1.0",
+  "name": "quake",
+  "version": "0.1.0",
   "author": "Fullstack.io",
+  "homepage": "https://github.com/J-reyes/Quake",
   "scripts": {
     "go": "open http://localhost:3000; npm run server",
     "e2e": "nightwatch; npm run reset-data;",
     "reset-data": "cp data.json.pristine data.json",
     "test": "npm run reset-data; ./node_modules/.bin/concurrently -k 'npm run server' 'npm run e2e'",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build",
     "server": "babel-node server.js",
     "start": "npm run server"
   },
@@ -23,11 +26,14 @@
     "babel-preset-es2015": "^6.24.1",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
+    "firebase-tools": "^5.1.1",
     "fs": "0.0.2",
     "gh-pages": "^2.0.1",
     "path": "0.12.7"
   },
   "devDependencies": {
-    "concurrently": "2.2.0"
+    "concurrently": "2.2.0",
+    "webpack": "^4.35.3",
+    "webpack-cli": "^3.3.5"
   }
 }

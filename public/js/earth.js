@@ -1,5 +1,5 @@
-
 const url = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2019-07-01&minlatitude=32&maxlatitude=36&minlongitude=-119&maxlongitude=-115";
+
 /*
   eslint-disable react/prefer-stateless-function, react/jsx-boolean-value,
   no-undef, jsx-a11y/label-has-for
@@ -21,14 +21,18 @@ class EarthQuakeDashboard extends React.Component {
 class EarthQuakeList extends React.Component {
   state = {
     quakes: [],
+    loading: false,
   }
 
-  
+
+
+import   
   componentDidMount = () => {
+    this.setState({loading: true})
     axios.get(url)
     .then(res => {
     
-    this.setState({quakes: res.data.features})
+    this.setState({quakes: res.data.features, loading: false});
     // let quakes = res.data.features
     // // let i = 0;
     // for(var key in quakes) {
@@ -58,18 +62,29 @@ class EarthQuakeList extends React.Component {
   render() {
     // console.log(this.state.earthquakes);
     // console.log(this.state.quakes)
+    const {loading} = this.state;
 
+    if (loading == true ){
+      return (
+        <div className="ui active inverted dimmer" style={{paddingTop: 100}}>
+         <div className="ui large text loader">Loading</div>
+        </div>
+      )}
     return (
-      <div className='ui centered card'>
+      <div className='ui centered'>
        {
          this.state.quakes.map((item, index) => {
-           console.log("item: " + item.id + " place: "+ item.properties.place +  " index : " + index );
+           console.log("item: " + item.id + " place: "+ item.properties.place +  " index : " + index + ' ' +item.properties.time );
            let location = item.properties.place;
+           let timesecs = item.properties.time
+
+  
 
            return (
-             <div className='ui content raised link card ' key={item.id}>
+             <div className='ui content raised link card ' key={item.id} style={{marginTop: 10}}>
               <p>Mag: {item.properties.mag}</p>
-                <div className=''>
+              <p>Time: {new Date(timesecs).toLocaleDateString() +  ' ' + new  Date(timesecs).toLocaleTimeString()}</p>
+                <div className='content'>
                  <div className="meta">
                    <span className="category left" >Center of Attention</span>
                  </div>

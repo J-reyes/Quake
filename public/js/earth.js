@@ -10,23 +10,59 @@ class EarthQuakeDashboard extends React.Component {
     return (
       <div className='ui three column centered grid'>
         <div className='column'>
-          <EarthQuakeList />
+          <ToggleMapView />
         </div>
       </div>
     );
   }
 }
 
+class ToggleMapView extends React.Component {
+  state = {
+    mapOpen: false,
+  };
+
+  handleFormOpen = () => {
+    console.log("clicked");
+    this.openForm();
+  };
+
+  handleFormClose = () => {
+    this.closeForm();
+  };
+
+  closeForm = () => {
+    console.log("clicked")
+    this.setState({ mapOpen: false})
+  }
+
+  openForm = () => {
+    this.setState({ mapOpen: true})
+  }
+
+  render() {
+    
+    if(this.state.mapOpen == true) {
+      return (
+        <MapView onFormClose={this.handleFormClose}/>
+        
+      );
+    } if (this.state.mapOpen == false) {
+      return (
+        <EarthQuakeList onFormOpen={this.handleFormOpen}/>
+      );
+    }
+  }
+}
+
+
 
 class EarthQuakeList extends React.Component {
   state = {
     quakes: [],
-    loading: false,
+    loading: true,
   }
-
-
-
-import   
+ 
   componentDidMount = () => {
     this.setState({loading: true})
     axios.get(url)
@@ -64,7 +100,7 @@ import
     // console.log(this.state.quakes)
     const {loading} = this.state;
 
-    if (loading == true ){
+    if (loading){
       return (
         <div className="ui active inverted dimmer" style={{paddingTop: 100}}>
          <div className="ui large text loader">Loading</div>
@@ -74,11 +110,9 @@ import
       <div className='ui centered'>
        {
          this.state.quakes.map((item, index) => {
-           console.log("item: " + item.id + " place: "+ item.properties.place +  " index : " + index + ' ' +item.properties.time );
+          //  console.log("item: " + item.id + " place: "+ item.properties.place +  " index : " + index + ' ' +item.properties.time );
            let location = item.properties.place;
            let timesecs = item.properties.time
-
-  
 
            return (
              <div className='ui content raised link card ' key={item.id} style={{marginTop: 10}}>
@@ -95,8 +129,13 @@ import
                   <a href={item.properties.url}><span >More Information</span></a>
                  </div>
                </div>
+                <span
+                 onClick={this.props.onFormOpen}
+                >
+                <button className='fluid ui basic red button'>Map View</button>
+                </span>
              </div> 
-             )
+            )
          })
        }
       </div>
@@ -104,6 +143,33 @@ import
   }
 }
 
+class MapView extends React.Component {
+
+  render() {
+      return (
+        <div className='ui content raised link card ' style={{marginTop: 10}}>
+          
+          <div className='content'>
+            <div className="meta">
+
+            </div>
+            <div className="center aligned description">
+             <p>Map feature coming soon..</p>
+            </div>
+            <div className="extra content center aligned segment" style={{ paddingTop: 10}}> 
+              
+            </div>
+          </div>
+          <button 
+            className='ui basic red button'
+            onClick={this.props.onFormClose}
+          >
+          Close Map View
+          </button>
+       </div> 
+      );
+  }
+}
 
 // child component of TimerDashBoard
 // just a wrapper component

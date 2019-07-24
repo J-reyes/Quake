@@ -3,3 +3,5 @@ tests_output/
 npm-debug.log.*
 node_modules
 fireabase*
+firebase-debug.log*
+.firebase/hosting.cHVibGlj.cache*
